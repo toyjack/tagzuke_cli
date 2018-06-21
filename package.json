@@ -1,0 +1,27 @@
+{
+  "name": "tagzuke_cli",
+  "version": "1.0.0",
+  "description": "to be a command line version for [tagzuke](https://github.com/toyjack/tagzuke)",
+  "main": "index.js",
+  "dependencies": {
+    "caporal": "^0.10.0",
+    "d3": "^5.5.0",
+    "xlsx": "^0.13.0",
+    "xregexp": "^4.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toyjack/tagzuke_cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toyjack/tagzuke_cli/issues"
+  },
+  "homepage": "https://github.com/toyjack/tagzuke_cli#readme"
+}
