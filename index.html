@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style type="text/css">
+    circle {
+        opacity: 0.8;
+        stroke-width: 2;
+        stroke : black;
+        fill : grey;
+    }
+    path {
+        opacity: 0.8;
+        stroke-width: 2;
+        stroke : blue;
+        fill : none;
+    }
+    </style>
+   
+</head>
+<body>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+
+    <script>
+      // const d3 = require('d3');
+      // const XLSX = require('xlsx');
+    
+      var data = [{
+          "ID": "S00001",
+          "name": "人",
+          "parentID": "R001",
+          "size": "10"
+        },
+        {
+          "ID": "S00002",
+          "name": "一／人",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00004",
+          "name": "二／人",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00006",
+          "name": "五／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00008",
+          "name": "ー（人）／等",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00010",
+          "name": "湯／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00012",
+          "name": "真／人",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00014",
+          "name": "漁／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00016",
+          "name": "海／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00018",
+          "name": "盗／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00020",
+          "name": "不／良／人",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00023",
+          "name": "毛／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00025",
+          "name": "白／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00027",
+          "name": "桃／ー（人）",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00029",
+          "name": "ー（人）／參",
+          "parentID": "S00001",
+          "size": "10"
+        },
+        {
+          "ID": "S00031",
+          "name": "佛",
+          "parentID": "R001",
+          "size": "10"
+        },
+        {
+          "ID": "S00032",
+          "name": "仏",
+          "parentID": "S00031",
+          "size": "10"
+        },
+        {
+          "ID": "S00033",
+          "name": "仿／佛",
+          "parentID": "R001",
+          "size": "10"
+        },
+        {
+          "ID": "S00035",
+          "name": "㑂",
+          "parentID": "S00033",
+          "size": "10"
+        },
+        {
+          "ID": "S00036",
+          "name": "仿／像",
+          "parentID": "S00033",
+          "size": "10"
+        },
+        {
+          "ID": "S00038",
+          "name": "㐻",
+          "parentID": "S00033",
+          "size": "10"
+        },
+        {
+          "ID": "ROOT",
+          "name": "類聚名義抄",
+          "size": "10"
+        },
+        {
+          "ID": "V01",
+          "name": "佛上",
+          "parentID": "ROOT",
+          "size": "10"
+        },
+        {
+          "ID": "R001",
+          "name": "人偏",
+          "parentID": "V01",
+          "size": "10"
+        }
+      ];
+      var root = d3.stratify()
+        .id(function (d) {
+          return d.ID;
+        })
+        .parentId(function (d) {
+          return d.parentID;
+        })
+        (data);
+      console.log(root)
+    
+    
+      var width = 1500;
+      var height = 800;
+      var svg = d3.select("body")
+        .append("svg")
+        .attrs({
+          "width": width,
+          "height": height
+        })
+        .append("g")
+        .attr("transform", "scale(0.8, 0.8)translate(20, 20)");
+    
+      var node_size = 20;
+      var cluster = d3.cluster()
+        .size([width, height]);
+      var nodes = cluster(root);
+      var links = nodes.links();
+      console.log("clustered nodes");
+      console.log(nodes);
+      console.log("clustered nodes (leaves)");
+      console.log(nodes.leaves());
+      console.log("clustered nodes (ancestors)"); // from root
+      console.log(nodes.ancestors());
+      console.log("clustered nodes (descendants)"); // from root
+      console.log(nodes.descendants());
+      console.log("clustered links");
+      console.log(links);
+    
+      // path
+      // see also:
+      // d3/d3-shape: Graphical primitives for visualization, such as lines and areas. 
+      // https://github.com/d3/d3-shape
+      var line = d3.line()
+        .curve(d3.curveBundle.beta(0.85))
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        });
+      svg.selectAll("path")
+        .data(links)
+        .enter()
+        .append("path")
+        .attr("d", function (d) {
+          return line([
+            d.source,
+            {
+              "x": d.source.x,
+              "y": (d.source.y + d.target.y) / 2
+            },
+            {
+              "x": d.target.x,
+              "y": (d.source.y + d.target.y) / 2
+            },
+            d.target
+          ]);
+        });
+    
+      // circle (overwrite path)
+      svg.selectAll("circle")
+        .data(nodes.descendants())
+        .enter()
+        .append("circle")
+        .attrs({
+          "cx": function (d) {
+            return d.x;
+          },
+          "cy": function (d) {
+            return d.y;
+          },
+          "r": node_size / 2
+        })
+        .append("title")
+        .text(function (d) {
+          return d.data.name;
+        });
+    
+      // text
+      svg.selectAll("text")
+        .data(nodes.descendants())
+        .enter()
+        .append("text")
+        .attrs({
+          "dy": node_size * 1.1,
+          "text-anchor": "middle",
+          "x": function (d) {
+            return d.x;
+          },
+          "y": function (d) {
+            return d.y;
+          }
+        })
+        .text(function (d) {
+          return d.data.name;
+        });
+    </script>
+</body>
+</html>
+
